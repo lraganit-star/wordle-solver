@@ -71,10 +71,10 @@ function createColorArr(word, colorArr, callback) {
 )
 }
 
-function reduceWordList (word, wordList, colorArr) {
+function reduceWordList (randomWord, wordList, colorArr) {
     var filteredList = wordList
     const colorList = colorArr
-    const letters = word.split("")
+    const letters = randomWord.split("")
 
     for (i in colorList) {
         if (colorList[i] =="green") {
@@ -90,8 +90,8 @@ function reduceWordList (word, wordList, colorArr) {
             filteredList = filteredListYellow
             // console.log('yellow', filteredList)
         }
-        if (colorList[i] =="gray") {
-            const filteredListGray = filteredList.filter(word => !word.includes(letters[i]))
+        if (colorList[i] == "gray" ) {
+            const filteredListGray = filteredList.filter(word => word.split("")[i] != letters[i])
             filteredList = filteredListGray
             // console.log('gray', filteredList)
         }   
