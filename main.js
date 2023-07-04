@@ -1,9 +1,36 @@
 const fs = require('fs');
 const readline = require('readline')
+const csv = require('csvtojson');
+const _ = require('lodash');
+
+const csvFilePath = 'unigram_freq.csv'; // Specify path of your csv file here.
 
 const data = fs.readFileSync('words.json',
     { encoding: 'utf8', flag: 'r' });
 parsedData = JSON.parse(data)
+
+async function getFiveLetterWords() {
+    const jsonObj = await csv().fromFile(csvFilePath);
+    const fiveLetterWords = _.filter(jsonObj, (obj) => obj.word.length === 5);
+    return fiveLetterWords;
+}
+
+async function unionwordlefreq(wordleList) {
+    const freq = await getFiveLetterWords();
+
+    const union = wordleList.map(word => {
+        const found = freq.find(f => f.word === word);
+        return (found) ? found : {word: word, count: 0};
+    })
+
+    return union
+}
+
+// unionwordlefreq(parsedData).then(union => console.log(union))
+
+const frequency = fs.readFileSync('unigram_freq.csv',
+    { encoding: 'utf8', flag: 'r'});
+frequencyList = JSON.parse(frequency)
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -67,7 +94,7 @@ function createColorArr(word, colorArr, callback) {
         colorArrMaker.push(answer.toLowerCase())
         createColorArr(word, colorArr, callback)
         }
-}
+    }
 )
 }
 
@@ -80,20 +107,18 @@ function reduceWordList (randomWord, wordList, colorArr) {
         if (colorList[i] =="green") {
             const filteredListGreen = filteredList.filter(word => word.split("")[i] == letters[i])
             filteredList = filteredListGreen
-            // console.log("green", filteredList)
+        }
 
-    }
         if (colorList[i]=="yellow") {
             const filteredListYellow = filteredList.filter(word => { 
                 return word.split("")[i] != letters[i] && word.includes(letters[i])
             })
             filteredList = filteredListYellow
-            // console.log('yellow', filteredList)
         }
-        if (colorList[i] == "gray" ) {
+
+        if (colorList[i] == "gray" || colorList[i] == "grey" ) {
             const filteredListGray = filteredList.filter(word => word.split("")[i] != letters[i])
             filteredList = filteredListGray
-            // console.log('gray', filteredList)
         }   
     }
     return filteredList
