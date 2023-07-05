@@ -1,125 +1,126 @@
 const fs = require('fs');
+const fsPromise = require('fs').promises;
 const readline = require('readline')
-const csv = require('csvtojson');
 const _ = require('lodash');
+const neatCsv = require('neat-csv')
 
 // const rl = readline.createInterface({
 //     input: process.stdin,
 //     output: process.stdout
 // })
 
+const wordJSON = fs.readFileSync('words.json',
+    { encoding: 'utf8', flag: 'r' });
+const wordleArr = JSON.parse(wordJSON)
+
 const csvFilePath = 'unigram_freq.csv'; // Specify path of your csv file here.
 
-const data = fs.readFileSync('words.json',
-    { encoding: 'utf8', flag: 'r' });
-parsedData = JSON.parse(data)
+async function frequencyArr() {
+    try {
+        const data = await fsPromise.readFile(csvFilePath)
+        const parsedData = await neatCsv(data);
+        
+        let dataMap = {}; 
+        parsedData.forEach(item => dataMap[item.word] = item.count);
 
+        const union = wordleArr.map(word => dataMap[word] 
+            ? {word, count: dataMap[word]}
+            : {word: word, count: 0}
+        );
+        return union
+        }
 
-// try to make this non-async
-const getFiveLetterWords =  {
-    const jsonObj = csv().fromFile(csvFilePath);
-    const fiveLetterWords = _.filter(jsonObj, (obj) => obj.word.length === 5);
-    return fiveLetterWords;
+    catch (error) {
+        console.error('File reading not so happy right now')
+    }
 }
 
-console.log(getFiveLetterWords())
+(async () => {
+    try {
+        const mainWordList = await frequencyArr();
 
-// // move this in the main function so it can change with the edited list
-// async function unionwordlefreq(wordleList) {
-//     const freq = await getFiveLetterWords();
+        function processWord(count) {
+            var colorArr = []
+            if (count < 6) {
+                var bestWord = mostFrequentWord(mainWordList).word;
+                console.log('bestWord', bestWord)
+                createColorArr(bestWord, colorArr, (result) => {
+                    mainWordList = reduceWordList(randomword, mainWordList, result);
+    
+                    processWord(count + 1);
+                })
+            }
+            
+            else if (colorArr.every(color => color == "green")) {
+                return ("Congrats on getting the correct word!")
+            }
+    
+            else if (count == 6) {
+                return ("You have reached the retry limit :( ")
+            }
+    
+            else {
+                rl.close();
+            }
+        }
+        processWord(0)
+    }
+    catch (error){
+        console.error('Error:', error)
+    }
+})();
 
-//     const union = wordleList.map(word => {
-//         const found = freq.find(f => f.word === word);
-//         return (found) ? found : {word: word, count: 0};
-//     })
+function mostFrequentWord(wordList) {
+    let maxi = {word: '', count: 0}
+    for ( let i in wordList ) {
+        if (wordList[i].count > maxi.count) {
+            maxi = wordList[i]
+        }
+    }
+    return maxi
+}
 
-//     return union
-// }
+function createColorArr(word, colorArr, callback) {
+    const colorArrMaker = colorArr
+    const letters = word.split("")
+    const question = (colorArrMaker.length < 5) ? `Can you please tell me the color of the letter "${letters[colorArrMaker.length]}"? ` : `Thank you so much for your help! ${colorArrMaker}`
+    rl.question(question, (answer) => {
+        if (colorArrMaker.length == 5) {
 
-// const frequencyList = unionwordlefreq(parsedData).then(union => console.log(union))
+            callback(colorArrMaker);
+        }
 
-// main(parsedData)
+        else {
+        colorArrMaker.push(answer.toLowerCase())
+        createColorArr(word, colorArr, callback)
+        }
+    }
+    )
+}
 
-// function main(wordList) {
-//     var mainWordList = wordList;
+function reduceWordList (bestWord, wordList, colorArr) {
+    var filteredList = wordList
+    const colorList = colorArr
+    const letters = bestWord.split("")
 
-//     function processWord(count) {
-//         console.log(mainWordList.length)
-//         var colorArr = []
-//         if (count < 6) {
-//             var randomword = randomWordGenerator(mainWordList);
-//             createColorArr(randomword, colorArr, (result) => {
-//                 mainWordList = reduceWordList(randomword, mainWordList, result);
+    for (i in colorList) {
+        if (colorList[i] =="green") {
+            const filteredListGreen = filteredList.filter(word => word.split("")[i] == letters[i])
+            filteredList = filteredListGreen
+        }
 
-//                 processWord(count + 1);
-//             })
-//         }
-        
-//         else if (colorArr.every(color => color == "green")) {
-//             return ("Congrats on getting the correct word!")
-//         }
+        if (colorList[i]=="yellow") {
+            const filteredListYellow = filteredList.filter(word => { 
+                return word.split("")[i] != letters[i] && word.includes(letters[i])
+            })
+            filteredList = filteredListYellow
+        }
 
-//         else if (count == 6) {
-//             return ("You have reached the retry limit :( ")
-//         }
-
-//         else {
-//             rl.close();
-//         }
-//     }
-//     processWord(0)
-// }
-
-// // Make this to where instead of a random word, pulls the most frequently used word
-// function randomWordGenerator(wordList) {
-//     const wordListLength = wordList.length
-//     const word = wordList[Math.floor(Math.random() * wordListLength)]
-//     console.log(word)
-//     return word
-// }
-
-
-// function createColorArr(word, colorArr, callback) {
-//     const colorArrMaker = colorArr
-//     const letters = word.split("")
-//     const question = (colorArrMaker.length < 5) ? `Can you please tell me the color of the letter "${letters[colorArrMaker.length]}"? ` : `Thank you so much for your help! ${colorArrMaker}`
-//     rl.question(question, (answer) => {
-//         if (colorArrMaker.length == 5) {
-
-//             callback(colorArrMaker);
-//         }
-
-//         else {
-//         colorArrMaker.push(answer.toLowerCase())
-//         createColorArr(word, colorArr, callback)
-//         }
-//     }
-// )
-// }
-
-// function reduceWordList (randomWord, wordList, colorArr) {
-//     var filteredList = wordList
-//     const colorList = colorArr
-//     const letters = randomWord.split("")
-
-//     for (i in colorList) {
-//         if (colorList[i] =="green") {
-//             const filteredListGreen = filteredList.filter(word => word.split("")[i] == letters[i])
-//             filteredList = filteredListGreen
-//         }
-
-//         if (colorList[i]=="yellow") {
-//             const filteredListYellow = filteredList.filter(word => { 
-//                 return word.split("")[i] != letters[i] && word.includes(letters[i])
-//             })
-//             filteredList = filteredListYellow
-//         }
-
-//         if (colorList[i] == "gray" || colorList[i] == "grey" ) {
-//             const filteredListGray = filteredList.filter(word => word.split("")[i] != letters[i])
-//             filteredList = filteredListGray
-//         }   
-//     }
-//     return filteredList
-// }
+        if (colorList[i] == "gray" || colorList[i] == "grey" ) {
+            const filteredListGray = filteredList.filter(word => word.split("")[i] != letters[i])
+            filteredList = filteredListGray
+        }   
+    }
+    return filteredList
+}
 
