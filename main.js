@@ -43,7 +43,7 @@ async function frequencyArr() {
             var colorArr = []
             if (count < 6) {
                 var bestWord = mostFrequentWord(mainWordList).word;
-                console.log('bestWord', bestWord)
+                console.log('Your word is: ', bestWord)
                 createColorArr(bestWord, colorArr, (result) => {
                     mainWordList = reduceWordList(bestWord, mainWordList, result);
     

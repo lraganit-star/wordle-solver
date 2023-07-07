@@ -1,3 +1,17 @@
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+#page {
+  display: flex;
+  flex-direction: column;
+
+  align-items:center;
+}
+
 #letter {
   height: 62px;
   width: 62px;
@@ -5,16 +19,56 @@
   border: 2px solid #d3d6da;
   justify-content: center;
   
-  margin: 5px;
+  margin: 2px;
+  font-size: 2rem;
+  font-family: 'Libre Franklin', sans-serif;;
+  font-weight: bold;
 
+  display: flex;
+  align-items: center;
+  color: black;
 }
 
 #word {
   display: flex;
-
 }
 
 #board {
   display: flex;
   flex-direction: column;
+}
+
+.palette {
+  height: 100px;
+  width: 300px;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  margin-top: 50px;
+}
+
+.color {
+  height: 62px;
+  width:62px;
+
+  border: 2px solid #d3d6da;
+  cursor: pointer; 
+}
+
+.color:hover {
+  opacity: 75%;
+}
+
+#green {
+  background-color: #6aaa64;
+}
+
+#yellow {
+  background-color: #c9b458;
+}
+
+#grey {
+  background-color: #787c7e;
 }
