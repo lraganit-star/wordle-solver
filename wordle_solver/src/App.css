@@ -3,4 +3,18 @@
   width: 62px;
 
   border: 2px solid #d3d6da;
+  justify-content: center;
+  
+  margin: 5px;
+
+}
+
+#word {
+  display: flex;
+
+}
+
+#board {
+  display: flex;
+  flex-direction: column;
 }

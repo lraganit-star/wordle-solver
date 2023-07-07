@@ -1,32 +1,34 @@
 import { useState } from "react";
 import "./App.css";
 
-// function Board() {
-//   return (
-//     <>
-//       <div id="board">
-//         <div id="firstWord"></div>
-//         <div id="secondWord"></div>
-//         <div id="thirdWord"></div>
-//         <div id="fourthWord"></div>
-//         <div id="fifthWord"></div>
-//         <div id="sixthWord"></div>
-//       </div>
-//     </>
-//   );
-// }
+function Board() {
+  return (
+    <>
+      <div id="board">
+        <Word id="firstword"></Word>
+        <Word id="secondword"></Word>
+        <Word id="thirdword"></Word>
+        <Word id="fourthword"></Word>
+        <Word id="fifthword"></Word>
+        <Word id="sixthword"></Word>
+      </div>
+    </>
+  );
+}
 
-// function Word() {
-//   return (
-//     <>
-//       <div id="firstletter"></div>
-//       <div id="secondletter"></div>
-//       <div id="thirdletter"></div>
-//       <div id="fourthletter"></div>
-//       <div id="fifthletter"></div>
-//     </>
-//   );
-// }
+function Word() {
+  return (
+    <>
+      <div id="word">
+        <Letter id="firstletter" />
+        <Letter id="secondletter" />
+        <Letter id="thirdletter" />
+        <Letter id="fourthletter" />
+        <Letter id="fifthletter" />
+      </div>
+    </>
+  );
+}
 
 function Letter() {
   return (
@@ -36,4 +38,4 @@ function Letter() {
   );
 }
 
-export default Letter;
+export default Board;
