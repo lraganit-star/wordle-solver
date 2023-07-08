@@ -52,20 +52,61 @@ function Word({ focusWord, letterColors }) {
   return (
     <>
       <div id="word">
-        <Letter id="firstletter" focusLetter={focusWordArr[0]}></Letter>
-        <Letter id="secondletter" focusLetter={focusWordArr[1]}></Letter>
-        <Letter id="thirdletter" focusLetter={focusWordArr[2]}></Letter>
-        <Letter id="fourthletter" focusLetter={focusWordArr[3]}></Letter>
-        <Letter id="fifthletter" focusLetter={focusWordArr[4]}></Letter>
+        <Letter
+          id="firstletter"
+          focusLetter={focusWordArr[0]}
+          focusColor={letterColors[0]}
+        ></Letter>
+        <Letter
+          id="secondletter"
+          focusLetter={focusWordArr[1]}
+          focusColor={letterColors[1]}
+        ></Letter>
+        <Letter
+          id="thirdletter"
+          focusLetter={focusWordArr[2]}
+          focusColor={letterColors[2]}
+        ></Letter>
+        <Letter
+          id="fourthletter"
+          focusLetter={focusWordArr[3]}
+          focusColor={letterColors[3]}
+        ></Letter>
+        <Letter
+          id="fifthletter"
+          focusLetter={focusWordArr[4]}
+          focusColor={letterColors[4]}
+        ></Letter>
       </div>
     </>
   );
 }
 
-function Letter({ focusLetter }) {
+function Letter({ focusLetter, focusColor }) {
+  let letterColor = focusColor;
+
+  switch (focusColor) {
+    case "green": {
+      letterColor = "#6aaa64";
+      break;
+    }
+    case "yellow": {
+      letterColor = "#c9b458";
+      break;
+    }
+    case "grey": {
+      letterColor = "#787c7e";
+      break;
+    }
+  }
+
+  // console.log(letterColor);
+
   return (
     <>
-      <div id="letter">{focusLetter}</div>
+      <div id="letter" style={{ backgroundColor: letterColor }}>
+        {focusLetter}
+      </div>
     </>
   );
 }
@@ -78,11 +119,14 @@ function Palette({ onLetterColors }) {
   };
 
   return (
-    <div className="palette">
-      <div className="color" onClick={handleLetterColors} id="green"></div>
-      <div className="color" onClick={handleLetterColors} id="yellow"></div>
-      <div className="color" onClick={handleLetterColors} id="grey"></div>
-    </div>
+    <>
+      <div className="palette">
+        <div className="color" onClick={handleLetterColors} id="green"></div>
+        <div className="color" onClick={handleLetterColors} id="yellow"></div>
+        <div className="color" onClick={handleLetterColors} id="grey"></div>
+      </div>
+      <button id="submit"></button>
+    </>
   );
 }
 
