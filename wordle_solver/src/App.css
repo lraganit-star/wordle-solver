@@ -3,6 +3,8 @@ body{
   justify-content: center;
   align-items: center;
   background-color: white;
+
+  font-family: 'Libre Franklin', sans-serif;
 }
 
 #page {
@@ -12,7 +14,7 @@ body{
   align-items:center;
 }
 
-#letter {
+.letter {
   height: 62px;
   width: 62px;
 
@@ -21,12 +23,14 @@ body{
   
   margin: 2px;
   font-size: 2rem;
-  font-family: 'Libre Franklin', sans-serif;;
+  
   font-weight: bold;
 
   display: flex;
   align-items: center;
   color: black;
+
+  cursor: pointer;
 }
 
 #word {
@@ -71,4 +75,9 @@ body{
 
 #grey {
   background-color: #787c7e;
+}
+
+#submit {
+
+  background-color: #d3d6da;
 }
