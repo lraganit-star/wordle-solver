@@ -2,31 +2,44 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function Page() {
+  const [currentColor, setCurrentColor] = useState("");
   const [letterColors, setLetterColors] = useState([]);
-  const [changeColor, setChangeColor] = useState({});
   const [word, setWord] = useState("");
 
   useEffect(() => {
     setWord("grace");
   });
 
-  const getLetterColors = (color) => {
-    const newColor = color;
-    const currentLetterColors = [...letterColors, newColor];
-    setLetterColors(currentLetterColors);
+  // will have to edit this to where instead of just adding it to the end, the color gets inserted
+  // in the right spot in the array
+  const getLetterColors = (color, colorPlacement) => {
+    const currentLetterColors = [...letterColors];
+    const addedColor = () => {
+      switch (colorPlacement) {
+        case "firstLetter":
+          currentLetterColors.splice(1, 0, color);
+        case "secondLetter":
+          currentLetterColors.splice(2, 0, color);
+        case "thirdLetter":
+          currentLetterColors.splice(3, 0, color);
+        case "fourthLetter":
+          currentLetterColors.splice(4, 0, color);
+        case "fifthLetter":
+          currentLetterColors.splice(5, 0, color);
+      }
+    };
+
+    setLetterColors(addedColor);
+    // setLetterColors(currentLetterColors);
   };
 
-  // okay so what I'm thinking about doing is using setChangeColor to where
-  // it saves if there is a letterid input first
-  // then the following color click will change the value of the color
-  // depending on the letterid
-  // it will have a max of 2 objects. Once the color has been chnaged
-  // changeColor will be emptied
-  const undoColor = (changeColor) => {
-    const currentLetterColors = [...letterColors];
-
-    switch (letterId) {
+  const handleUndo = (letterPlacement) => {
+    if (!history.length) {
+      return;
+    }
+    switch (letterPlacement) {
       case "firstLetter":
+        setCurrentColor(letterColors);
         break;
       case "secondLetter":
         break;
@@ -37,11 +50,12 @@ function Page() {
       case "fifthLetter":
         break;
     }
+    setCurrentColor(letterColors[letterColors.length - 1]);
+    setLetterColors(letterColors.slice(0, -1));
   };
 
   // esentially this is going to create a new array in letterColors
-  // and place the next word in the following row depending on
-  // the user input
+  // and place the next word in the following row depending on the user input
   const handleSubmit = () => {};
 
   return (
@@ -67,8 +81,7 @@ function Board({ focusWord, letterColors }) {
           letterColors={letterColors}
         ></Word>
 
-        {/* add multiple words after getting the different words in from main.js*/}
-
+        {/* add multiple words after getting the different words in from main.js */}
         {/* <Word
           id="secondword"
           focusWord={focusWord}
@@ -85,8 +98,6 @@ function Board({ focusWord, letterColors }) {
 
 function Word({ focusWord, letterColors }) {
   const focusWordArr = focusWord.toUpperCase().split("");
-
-  // if there is a color in the spot for the letterColors arr then change color of block
 
   return (
     <>
@@ -122,28 +133,19 @@ function Word({ focusWord, letterColors }) {
 }
 
 function Letter({ id, focusLetter, focusColor }) {
-  let letterColor = focusColor;
-
-  switch (focusColor) {
-    case "green": {
-      letterColor = "#6aaa64";
-      break;
+  const letterColor = (() => {
+    switch (focusColor) {
+      case "green": {
+        return "#6aaa64";
+      }
+      case "yellow": {
+        return "#c9b458";
+      }
+      case "grey": {
+        return "#787c7e";
+      }
     }
-    case "yellow": {
-      letterColor = "#c9b458";
-      break;
-    }
-    case "grey": {
-      letterColor = "#787c7e";
-      break;
-    }
-  }
-
-  const handleUndo = (e) => {
-    e.preventDefault();
-    const letterPlacement = e.target.id;
-    undoColor(letterPlacement);
-  };
+  })();
 
   return (
     <>
@@ -151,7 +153,6 @@ function Letter({ id, focusLetter, focusColor }) {
         className={"letter"}
         id={id}
         style={{ backgroundColor: letterColor }}
-        onClick={handleUndo}
       >
         {focusLetter}
       </div>
@@ -159,7 +160,8 @@ function Letter({ id, focusLetter, focusColor }) {
   );
 }
 
-function Palette({ onLetterColors }) {
+function Palette({ onLetterColors, letterId }) {
+  // need way to get the letterID here
   const handleLetterColors = (e) => {
     e.preventDefault();
     const color = e.target.id;
