@@ -3,33 +3,53 @@ import "./App.css";
 
 function Page() {
   const [currentColor, setCurrentColor] = useState("");
+  const [letterIdAndColor, setLetterIdAndColor] = useState({});
   const [letterColors, setLetterColors] = useState([]);
+  const [letterId, setLetterId] = useState(null);
   const [word, setWord] = useState("");
+  console.log(letterId);
 
   useEffect(() => {
     setWord("grace");
   });
 
-  // will have to edit this to where instead of just adding it to the end, the color gets inserted
-  // in the right spot in the array
-  const getLetterColors = (color, colorPlacement) => {
-    const currentLetterColors = [...letterColors];
-    const addedColor = () => {
-      switch (colorPlacement) {
-        case "firstLetter":
-          currentLetterColors.splice(1, 0, color);
-        case "secondLetter":
-          currentLetterColors.splice(2, 0, color);
-        case "thirdLetter":
-          currentLetterColors.splice(3, 0, color);
-        case "fourthLetter":
-          currentLetterColors.splice(4, 0, color);
-        case "fifthLetter":
-          currentLetterColors.splice(5, 0, color);
-      }
+  // I can pass this function as a prop down to Letter
+
+  function handleLetterInfo(id, focusColor) {
+    const letterInfo = {
+      letterId: id,
+      color: focusColor,
     };
 
-    setLetterColors(addedColor);
+    setLetterId(id);
+    setLetterIdAndColor((prevLetters) => {
+      const updatedLetters = [...prevLetters, letterInfo];
+      return updatedLetters;
+    });
+  }
+  // will have to edit this to where instead of just adding it to the end, the color gets inserted
+  // in the right spot in the array
+  const getLetterColors = (color) => {
+    const currentLetterColors = [...letterColors, color];
+    console.log("letterId", letterId);
+    console.log("current", currentLetterColors);
+
+    // const addedColor = () => {
+    //   switch (colorPlacement) {
+    //     case "firstLetter":
+    //       currentLetterColors.splice(1, 0, color);
+    //     case "secondLetter":
+    //       currentLetterColors.splice(2, 0, color);
+    //     case "thirdLetter":
+    //       currentLetterColors.splice(3, 0, color);
+    //     case "fourthLetter":
+    //       currentLetterColors.splice(4, 0, color);
+    //     case "fifthLetter":
+    //       currentLetterColors.splice(5, 0, color);
+    //   }
+    // };
+
+    setLetterColors(currentLetterColors);
     // setLetterColors(currentLetterColors);
   };
 
@@ -61,8 +81,18 @@ function Page() {
   return (
     <>
       <div id="page">
-        <Board focusWord={word} letterColors={letterColors}></Board>
-        <Palette id="palette" onLetterColors={getLetterColors}></Palette>
+        <Board
+          focusWord={word}
+          letterColors={letterColors}
+          setLetterId={setLetterId}
+          setLetterIdAndColor={setLetterIdAndColor}
+          onLetterInfo={handleLetterInfo}
+        ></Board>
+        <Palette
+          id="palette"
+          onLetterColors={getLetterColors}
+          letterId={letterId}
+        ></Palette>
         <button id="submit" onClick={handleSubmit}>
           Submit
         </button>
@@ -71,7 +101,7 @@ function Page() {
   );
 }
 
-function Board({ focusWord, letterColors }) {
+function Board({ focusWord, letterColors, onLetterInfo }) {
   return (
     <>
       <div id="board">
@@ -79,6 +109,7 @@ function Board({ focusWord, letterColors }) {
           id="firstword"
           focusWord={focusWord}
           letterColors={letterColors}
+          letterInfo={onLetterInfo}
         ></Word>
 
         {/* add multiple words after getting the different words in from main.js */}
@@ -96,7 +127,7 @@ function Board({ focusWord, letterColors }) {
   );
 }
 
-function Word({ focusWord, letterColors }) {
+function Word({ focusWord, letterColors, letterInfo }) {
   const focusWordArr = focusWord.toUpperCase().split("");
 
   return (
@@ -106,33 +137,38 @@ function Word({ focusWord, letterColors }) {
           id="firstLetter"
           focusLetter={focusWordArr[0]}
           focusColor={letterColors[0]}
+          letterInfo={letterInfo}
         ></Letter>
         <Letter
           id="secondLetter"
           focusLetter={focusWordArr[1]}
           focusColor={letterColors[1]}
+          letterInfo={letterInfo}
         ></Letter>
         <Letter
           id="thirdLetter"
           focusLetter={focusWordArr[2]}
           focusColor={letterColors[2]}
+          letterInfo={letterInfo}
         ></Letter>
         <Letter
           id="fourthLetter"
           focusLetter={focusWordArr[3]}
           focusColor={letterColors[3]}
+          letterInfo={letterInfo}
         ></Letter>
         <Letter
           id="fifthLetter"
           focusLetter={focusWordArr[4]}
           focusColor={letterColors[4]}
+          letterInfo={letterInfo}
         ></Letter>
       </div>
     </>
   );
 }
 
-function Letter({ id, focusLetter, focusColor }) {
+function Letter({ id, focusLetter, focusColor, letterInfo }) {
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
@@ -147,12 +183,15 @@ function Letter({ id, focusLetter, focusColor }) {
     }
   })();
 
+  letterInfo(id, focusColor);
+
   return (
     <>
       <div
         className={"letter"}
         id={id}
         style={{ backgroundColor: letterColor }}
+        // letterInfo={(id, focusColor)}
       >
         {focusLetter}
       </div>
