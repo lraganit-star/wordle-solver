@@ -23,7 +23,7 @@ function Page() {
 
     setLetterId(id);
     setLetterIdAndColor((prevLetters) => {
-      const updatedLetters = [...prevLetters, letterInfo];
+      const updatedLetters = { ...prevLetters, ...letterInfo };
       return updatedLetters;
     });
   }
@@ -183,7 +183,9 @@ function Letter({ id, focusLetter, focusColor, letterInfo }) {
     }
   })();
 
-  letterInfo(id, focusColor);
+  useEffect(() => {
+    letterInfo(id, focusColor);
+  }, [id, focusColor, letterInfo]);
 
   return (
     <>
