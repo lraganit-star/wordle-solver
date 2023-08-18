@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function Page() {
@@ -13,19 +13,17 @@ function Page() {
     setWord("grace");
   });
 
-  // I can pass this function as a prop down to Letter
-
   function handleLetterInfo(id, focusColor) {
-    const letterInfo = {
-      letterId: id,
-      color: focusColor,
-    };
+    if (!letterIdAndColor[id] || letterIdAndColor[id].color !== focusColor) {
+      const letterInfo = {
+        [id]: {
+          letterId: id,
+          color: focusColor,
+        },
+      };
 
-    setLetterId(id);
-    setLetterIdAndColor((prevLetters) => {
-      const updatedLetters = { ...prevLetters, ...letterInfo };
-      return updatedLetters;
-    });
+      setLetterIdAndColor((prevLetters) => ({ ...prevLetters, ...letterInfo }));
+    }
   }
   // will have to edit this to where instead of just adding it to the end, the color gets inserted
   // in the right spot in the array
