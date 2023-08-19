@@ -21,10 +21,11 @@ function Page() {
           color: focusColor,
         },
       };
-
       setLetterIdAndColor((prevLetters) => ({ ...prevLetters, ...letterInfo }));
+      console.log("letterInfo", letterInfo);
     }
   }
+
   // will have to edit this to where instead of just adding it to the end, the color gets inserted
   // in the right spot in the array
   const getLetterColors = (color) => {
@@ -185,13 +186,18 @@ function Letter({ id, focusLetter, focusColor, letterInfo }) {
     letterInfo(id, focusColor);
   }, [id, focusColor, letterInfo]);
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    console.log(e.target.id);
+  };
+
   return (
     <>
       <div
         className={"letter"}
         id={id}
         style={{ backgroundColor: letterColor }}
-        // letterInfo={(id, focusColor)}
+        onClick={handleClick}
       >
         {focusLetter}
       </div>
