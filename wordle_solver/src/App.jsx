@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function Page() {
-  const [currentColor, setCurrentColor] = useState("");
   const [letterIdAndColor, setLetterIdAndColor] = useState({});
   const [letterColors, setLetterColors] = useState([]);
   const [letterId, setLetterId] = useState(null);
   const [word, setWord] = useState("");
+
+  const [undoLetter, setUndoLetter] = useState("");
   console.log(letterId);
 
   useEffect(() => {
@@ -28,16 +29,18 @@ function Page() {
 
   const getLetterColors = (color) => {
     const currentLetterColors = [...letterColors, color];
-    console.log("letterId", letterId);
-    console.log("current", currentLetterColors);
-
     setLetterColors(currentLetterColors);
   };
 
-  const handleUndo = (letterPlacement) => {
-    if (!history.length) {
+  const handleUndoLetter = (letter) => {
+    setUndoLetter(letter);
+  };
+
+  const handleUndo = (letterIdAndColor) => {
+    if (!undoLetter.length) {
       return;
     }
+
     switch (letterPlacement) {
       case "firstLetter":
         setCurrentColor(letterColors);
@@ -68,6 +71,7 @@ function Page() {
           setLetterId={setLetterId}
           setLetterIdAndColor={setLetterIdAndColor}
           onLetterInfo={handleLetterInfo}
+          onUndoLetter={handleUndoLetter}
         ></Board>
         <Palette
           id="palette"
@@ -82,7 +86,7 @@ function Page() {
   );
 }
 
-function Board({ focusWord, letterColors, onLetterInfo }) {
+function Board({ focusWord, letterColors, onLetterInfo, onUndoLetter }) {
   return (
     <>
       <div id="board">
@@ -91,6 +95,7 @@ function Board({ focusWord, letterColors, onLetterInfo }) {
           focusWord={focusWord}
           letterColors={letterColors}
           letterInfo={onLetterInfo}
+          undoLetter={onUndoLetter}
         ></Word>
 
         {/* add multiple words after getting the different words in from main.js */}
@@ -108,7 +113,7 @@ function Board({ focusWord, letterColors, onLetterInfo }) {
   );
 }
 
-function Word({ focusWord, letterColors, letterInfo }) {
+function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
   const focusWordArr = focusWord.toUpperCase().split("");
 
   return (
@@ -119,37 +124,42 @@ function Word({ focusWord, letterColors, letterInfo }) {
           focusLetter={focusWordArr[0]}
           focusColor={letterColors[0]}
           letterInfo={letterInfo}
+          undoLetter={undoLetter}
         ></Letter>
         <Letter
           id="secondLetter"
           focusLetter={focusWordArr[1]}
           focusColor={letterColors[1]}
           letterInfo={letterInfo}
+          undoLetter={undoLetter}
         ></Letter>
         <Letter
           id="thirdLetter"
           focusLetter={focusWordArr[2]}
           focusColor={letterColors[2]}
           letterInfo={letterInfo}
+          undoLetter={undoLetter}
         ></Letter>
         <Letter
           id="fourthLetter"
           focusLetter={focusWordArr[3]}
           focusColor={letterColors[3]}
           letterInfo={letterInfo}
+          undoLetter={undoLetter}
         ></Letter>
         <Letter
           id="fifthLetter"
           focusLetter={focusWordArr[4]}
           focusColor={letterColors[4]}
           letterInfo={letterInfo}
+          undoLetter={undoLetter}
         ></Letter>
       </div>
     </>
   );
 }
 
-function Letter({ id, focusLetter, focusColor, letterInfo }) {
+function Letter({ id, focusLetter, focusColor, letterInfo, undoLetter }) {
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
@@ -170,7 +180,8 @@ function Letter({ id, focusLetter, focusColor, letterInfo }) {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(e.target.id);
+    const letterplacement = e.target.id;
+    undoLetter(letterplacement);
   };
 
   return (
@@ -188,7 +199,6 @@ function Letter({ id, focusLetter, focusColor, letterInfo }) {
 }
 
 function Palette({ onLetterColors, letterId }) {
-  // need way to get the letterID here
   const handleLetterColors = (e) => {
     e.preventDefault();
     const color = e.target.id;
