@@ -26,30 +26,12 @@ function Page() {
     }
   }
 
-  // will have to edit this to where instead of just adding it to the end, the color gets inserted
-  // in the right spot in the array
   const getLetterColors = (color) => {
     const currentLetterColors = [...letterColors, color];
     console.log("letterId", letterId);
     console.log("current", currentLetterColors);
 
-    // const addedColor = () => {
-    //   switch (colorPlacement) {
-    //     case "firstLetter":
-    //       currentLetterColors.splice(1, 0, color);
-    //     case "secondLetter":
-    //       currentLetterColors.splice(2, 0, color);
-    //     case "thirdLetter":
-    //       currentLetterColors.splice(3, 0, color);
-    //     case "fourthLetter":
-    //       currentLetterColors.splice(4, 0, color);
-    //     case "fifthLetter":
-    //       currentLetterColors.splice(5, 0, color);
-    //   }
-    // };
-
     setLetterColors(currentLetterColors);
-    // setLetterColors(currentLetterColors);
   };
 
   const handleUndo = (letterPlacement) => {
