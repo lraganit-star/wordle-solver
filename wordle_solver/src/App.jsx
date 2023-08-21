@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function Page() {
-  const [letterIdAndColor, setLetterIdAndColor] = useState({});
+  const [letterIdAndColor, setLetterIdAndColor] = useState([]);
   const [letterColors, setLetterColors] = useState([]);
   const [letterId, setLetterId] = useState(null);
   const [word, setWord] = useState("");
 
   const [undoLetter, setUndoLetter] = useState("");
-  console.log(letterId);
 
   useEffect(() => {
     setWord("grace");
@@ -17,15 +16,16 @@ function Page() {
   function handleLetterInfo(id, focusColor) {
     if (!letterIdAndColor[id] || letterIdAndColor[id].color !== focusColor) {
       const letterInfo = {
-        [id]: {
-          letterId: id,
-          color: focusColor,
-        },
+        id: id,
+        color: focusColor,
       };
-      setLetterIdAndColor((prevLetters) => ({ ...prevLetters, ...letterInfo }));
-      console.log("letterInfo", letterInfo);
+      setLetterIdAndColor((prevLetters) => {
+        const updatedLetterInfo = [...prevLetters, letterInfo];
+        return updatedLetterInfo;
+      });
     }
   }
+  console.log(letterIdAndColor);
 
   const getLetterColors = (color) => {
     const currentLetterColors = [...letterColors, color];
@@ -36,12 +36,12 @@ function Page() {
     setUndoLetter(letter);
   };
 
-  const handleUndo = (letterIdAndColor) => {
-    if (!undoLetter.length) {
-      return;
-    }
-
-    switch (letterPlacement) {
+  const handleUndo = (undoLetter, letterIdAndColor) => {
+    // if (!undoLetter.length) {
+    //   return;
+    // }
+    console.log("handleUndo");
+    switch (undoLetter) {
       case "firstLetter":
         setCurrentColor(letterColors);
         break;
@@ -160,6 +160,7 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
 }
 
 function Letter({ id, focusLetter, focusColor, letterInfo, undoLetter }) {
+  // don't forget to change style of letter too
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
@@ -176,12 +177,13 @@ function Letter({ id, focusLetter, focusColor, letterInfo, undoLetter }) {
 
   useEffect(() => {
     letterInfo(id, focusColor);
-  }, [id, focusColor, letterInfo]);
+  }, [id, focusColor]);
 
   const handleClick = (e) => {
     e.preventDefault();
     const letterplacement = e.target.id;
     undoLetter(letterplacement);
+    console.log("Letter Placement", letterplacement);
   };
 
   return (
