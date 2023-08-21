@@ -22,54 +22,54 @@ function Page() {
   };
 
   const handleUndoColor = (color) => {
-    setUndoColor(color);
+    handleUndo(undoLetter, color);
   };
 
   function handleUndo(undoLetter, undoColor) {
-    if (undoColor) {
-      switch (undoLetter) {
-        case "firstLetter":
-          setLetterColors((prevColors) => {
-            const undoColors = [...prevColors];
-            undoColors.splice(0, 1, undoColor);
-            return undoColors;
-          });
-          break;
-        case "secondLetter":
-          setLetterColors((prevColors) => {
-            const undoColors = [...prevColors];
-            undoColors.splice(1, 1, undoColor);
-            return undoColors;
-          });
-          break;
-        case "thirdLetter":
-          setLetterColors((prevColors) => {
-            const undoColors = [...prevColors];
-            undoColors.splice(2, 1, undoColor);
-            return undoColors;
-          });
-          break;
-        case "fourthLetter":
-          setLetterColors((prevColors) => {
-            const undoColors = [...prevColors];
-            undoColors.splice(3, 1, undoColor);
-            return undoColors;
-          });
-          break;
-        case "fifthLetter":
-          setLetterColors((prevColors) => {
-            const undoColors = [...prevColors];
-            undoColors.splice(4, 1, undoColor);
-            return undoColors;
-          });
-          break;
-      }
-      setUndoColor("");
-      setUndoLetter("");
+    if (!undoColor) {
+      return;
+    }
+    switch (undoLetter) {
+      case "firstLetter":
+        setLetterColors((prevColors) => {
+          const undoColors = [...prevColors];
+          undoColors.splice(0, 1, undoColor);
+          return undoColors;
+        });
+        break;
+      case "secondLetter":
+        setLetterColors((prevColors) => {
+          const undoColors = [...prevColors];
+          undoColors.splice(1, 1, undoColor);
+          return undoColors;
+        });
+        break;
+      case "thirdLetter":
+        setLetterColors((prevColors) => {
+          const undoColors = [...prevColors];
+          undoColors.splice(2, 1, undoColor);
+          return undoColors;
+        });
+        break;
+      case "fourthLetter":
+        setLetterColors((prevColors) => {
+          const undoColors = [...prevColors];
+          undoColors.splice(3, 1, undoColor);
+          return undoColors;
+        });
+        break;
+      case "fifthLetter":
+        setLetterColors((prevColors) => {
+          const undoColors = [...prevColors];
+          undoColors.splice(4, 1, undoColor);
+          return undoColors;
+        });
+        break;
+
+        setUndoColor("");
+        setUndoLetter("");
     }
   }
-
-  handleUndo(undoLetter, undoColor);
 
   // esentially this is going to create a new array in letterColors
   // and place the next word in the following row depending on the user input
