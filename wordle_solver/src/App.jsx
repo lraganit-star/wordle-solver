@@ -4,10 +4,10 @@ import "./App.css";
 function Page() {
   const [letterIdAndColor, setLetterIdAndColor] = useState([]);
   const [letterColors, setLetterColors] = useState([]);
-  const [letterId, setLetterId] = useState(null);
   const [word, setWord] = useState("");
 
   const [undoLetter, setUndoLetter] = useState("");
+  const [undoColor, setUndoColor] = useState("");
 
   useEffect(() => {
     setWord("grace");
@@ -25,7 +25,6 @@ function Page() {
       });
     }
   }
-  console.log(letterIdAndColor);
 
   const getLetterColors = (color) => {
     const currentLetterColors = [...letterColors, color];
@@ -36,23 +35,30 @@ function Page() {
     setUndoLetter(letter);
   };
 
-  const handleUndo = (undoLetter, letterIdAndColor) => {
-    // if (!undoLetter.length) {
-    //   return;
-    // }
-    console.log("handleUndo");
-    switch (undoLetter) {
-      case "firstLetter":
-        setCurrentColor(letterColors);
-        break;
-      case "secondLetter":
-        break;
-      case "thirdLetter":
-        break;
-      case "fourthLetter":
-        break;
-      case "fifthLetter":
-        break;
+  const handleUndoColor = (color) => {
+    setUndoColor(color);
+  };
+
+  const handleUndo = (undoLetter, undoColor, letterIdAndColor) => {
+    if (letterIdAndColor.map((x) => x.id == undoLetter)) {
+      switch (undoLetter) {
+        case "firstLetter":
+          setLetterIdAndColor((prevLetters) => {
+            const changeColor = {
+              id: undoLetter,
+              color: undoColor,
+            };
+          });
+          break;
+        case "secondLetter":
+          break;
+        case "thirdLetter":
+          break;
+        case "fourthLetter":
+          break;
+        case "fifthLetter":
+          break;
+      }
     }
     setCurrentColor(letterColors[letterColors.length - 1]);
     setLetterColors(letterColors.slice(0, -1));
@@ -68,7 +74,6 @@ function Page() {
         <Board
           focusWord={word}
           letterColors={letterColors}
-          setLetterId={setLetterId}
           setLetterIdAndColor={setLetterIdAndColor}
           onLetterInfo={handleLetterInfo}
           onUndoLetter={handleUndoLetter}
@@ -76,7 +81,8 @@ function Page() {
         <Palette
           id="palette"
           onLetterColors={getLetterColors}
-          letterId={letterId}
+          onUndoColor={handleUndoColor}
+          undoLetter={undoLetter}
         ></Palette>
         <button id="submit" onClick={handleSubmit}>
           Submit
@@ -200,10 +206,15 @@ function Letter({ id, focusLetter, focusColor, letterInfo, undoLetter }) {
   );
 }
 
-function Palette({ onLetterColors, letterId }) {
+function Palette({ onLetterColors, onUndoColor, undoLetter }) {
   const handleLetterColors = (e) => {
     e.preventDefault();
     const color = e.target.id;
+
+    if (undoLetter) {
+      onUndoColor(color);
+    }
+
     onLetterColors(color);
   };
 
