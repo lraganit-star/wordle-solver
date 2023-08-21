@@ -2,33 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function Page() {
-  const [letterIdAndColor, setLetterIdAndColor] = useState([]);
   const [letterColors, setLetterColors] = useState([]);
   const [word, setWord] = useState("");
 
   const [undoLetter, setUndoLetter] = useState("");
   const [undoColor, setUndoColor] = useState("");
 
-  console.log("undoLetter", undoLetter);
-  console.log("undoColor", undoColor);
-  console.log("all Colors", letterColors);
-
   useEffect(() => {
     setWord("grace");
   });
-
-  function handleLetterInfo(id, focusColor) {
-    if (focusColor) {
-      const letterInfo = {
-        id: id,
-        color: focusColor,
-      };
-      setLetterIdAndColor((prevLetters) => {
-        const updatedLetterInfo = [...prevLetters, letterInfo];
-        return updatedLetterInfo;
-      });
-    }
-  }
 
   const getLetterColors = (color) => {
     const currentLetterColors = [...letterColors, color];
@@ -99,8 +81,6 @@ function Page() {
         <Board
           focusWord={word}
           letterColors={letterColors}
-          setLetterIdAndColor={setLetterIdAndColor}
-          onLetterInfo={handleLetterInfo}
           onUndoLetter={handleUndoLetter}
           undoColor={undoColor}
         ></Board>
@@ -118,13 +98,7 @@ function Page() {
   );
 }
 
-function Board({
-  focusWord,
-  letterColors,
-  onLetterInfo,
-  onUndoLetter,
-  undoColor,
-}) {
+function Board({ focusWord, letterColors, onUndoLetter, undoColor }) {
   return (
     <>
       <div id="board">
@@ -132,7 +106,6 @@ function Board({
           id="firstword"
           focusWord={focusWord}
           letterColors={letterColors}
-          letterInfo={onLetterInfo}
           undoLetter={onUndoLetter}
         ></Word>
 
@@ -151,7 +124,7 @@ function Board({
   );
 }
 
-function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
+function Word({ focusWord, letterColors, undoLetter, undoColor }) {
   const focusWordArr = focusWord.toUpperCase().split("");
 
   return (
@@ -161,7 +134,6 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
           id="firstLetter"
           focusLetter={focusWordArr[0]}
           focusColor={letterColors[0]}
-          letterInfo={letterInfo}
           undoLetter={undoLetter}
           undoColor={undoColor}
         ></Letter>
@@ -169,7 +141,6 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
           id="secondLetter"
           focusLetter={focusWordArr[1]}
           focusColor={letterColors[1]}
-          letterInfo={letterInfo}
           undoLetter={undoLetter}
           undoColor={undoColor}
         ></Letter>
@@ -177,7 +148,6 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
           id="thirdLetter"
           focusLetter={focusWordArr[2]}
           focusColor={letterColors[2]}
-          letterInfo={letterInfo}
           undoLetter={undoLetter}
           undoColor={undoColor}
         ></Letter>
@@ -185,7 +155,6 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
           id="fourthLetter"
           focusLetter={focusWordArr[3]}
           focusColor={letterColors[3]}
-          letterInfo={letterInfo}
           undoLetter={undoLetter}
           undoColor={undoColor}
         ></Letter>
@@ -193,7 +162,6 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
           id="fifthLetter"
           focusLetter={focusWordArr[4]}
           focusColor={letterColors[4]}
-          letterInfo={letterInfo}
           undoLetter={undoLetter}
           undoColor={undoColor}
         ></Letter>
@@ -202,14 +170,7 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
   );
 }
 
-function Letter({
-  id,
-  focusLetter,
-  focusColor,
-  letterInfo,
-  undoLetter,
-  undoColor,
-}) {
+function Letter({ id, focusLetter, focusColor, undoLetter, undoColor }) {
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
@@ -223,10 +184,6 @@ function Letter({
       }
     }
   })();
-
-  useEffect(() => {
-    letterInfo(id, focusColor);
-  }, [id, focusColor]);
 
   const handleClick = (e) => {
     e.preventDefault();
