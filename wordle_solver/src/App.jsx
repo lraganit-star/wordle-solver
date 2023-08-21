@@ -14,7 +14,7 @@ function Page() {
   });
 
   function handleLetterInfo(id, focusColor) {
-    if (!letterIdAndColor[id] || letterIdAndColor[id].color !== focusColor) {
+    if (focusColor) {
       const letterInfo = {
         id: id,
         color: focusColor,
