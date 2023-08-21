@@ -9,6 +9,10 @@ function Page() {
   const [undoLetter, setUndoLetter] = useState("");
   const [undoColor, setUndoColor] = useState("");
 
+  console.log("undoLetter", undoLetter);
+  console.log("undoColor", undoColor);
+  console.log("all Colors", letterColors);
+
   useEffect(() => {
     setWord("grace");
   });
@@ -39,29 +43,43 @@ function Page() {
     setUndoColor(color);
   };
 
-  const handleUndo = (undoLetter, undoColor, letterIdAndColor) => {
-    if (letterIdAndColor.map((x) => x.id == undoLetter)) {
+  const handleUndo = (undoLetter, undoColor) => {
+    if (undoColor) {
       switch (undoLetter) {
         case "firstLetter":
-          setLetterIdAndColor((prevLetters) => {
-            const changeColor = {
-              id: undoLetter,
-              color: undoColor,
-            };
+          setLetterColors((prevColors) => {
+            const undoColors = [...prevColors];
+            return undoColors.splice(0, 1, undoColor);
           });
           break;
         case "secondLetter":
+          setLetterColors((prevColors) => {
+            const undoColors = [...prevColors];
+            return undoColors.splice(1, 1, undoColor);
+          });
           break;
         case "thirdLetter":
+          setLetterColors((prevColors) => {
+            const undoColors = [...prevColors];
+            return undoColors.splice(2, 1, undoColor);
+          });
           break;
         case "fourthLetter":
+          setLetterColors((prevColors) => {
+            const undoColors = [...prevColors];
+            return undoColors.splice(3, 1, undoColor);
+          });
           break;
         case "fifthLetter":
+          setLetterColors((prevColors) => {
+            const undoColors = [...prevColors];
+            return undoColors.splice(4, 1, undoColor);
+          });
           break;
       }
+      setUndoColor("");
+      setUndoLetter("");
     }
-    setCurrentColor(letterColors[letterColors.length - 1]);
-    setLetterColors(letterColors.slice(0, -1));
   };
 
   // esentially this is going to create a new array in letterColors
@@ -77,6 +95,7 @@ function Page() {
           setLetterIdAndColor={setLetterIdAndColor}
           onLetterInfo={handleLetterInfo}
           onUndoLetter={handleUndoLetter}
+          undoColor={undoColor}
         ></Board>
         <Palette
           id="palette"
@@ -92,7 +111,13 @@ function Page() {
   );
 }
 
-function Board({ focusWord, letterColors, onLetterInfo, onUndoLetter }) {
+function Board({
+  focusWord,
+  letterColors,
+  onLetterInfo,
+  onUndoLetter,
+  undoColor,
+}) {
   return (
     <>
       <div id="board">
@@ -119,7 +144,7 @@ function Board({ focusWord, letterColors, onLetterInfo, onUndoLetter }) {
   );
 }
 
-function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
+function Word({ focusWord, letterColors, letterInfo, undoLetter, undoColor }) {
   const focusWordArr = focusWord.toUpperCase().split("");
 
   return (
@@ -131,6 +156,7 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
           focusColor={letterColors[0]}
           letterInfo={letterInfo}
           undoLetter={undoLetter}
+          undoColor={undoColor}
         ></Letter>
         <Letter
           id="secondLetter"
@@ -138,6 +164,7 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
           focusColor={letterColors[1]}
           letterInfo={letterInfo}
           undoLetter={undoLetter}
+          undoColor={undoColor}
         ></Letter>
         <Letter
           id="thirdLetter"
@@ -145,6 +172,7 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
           focusColor={letterColors[2]}
           letterInfo={letterInfo}
           undoLetter={undoLetter}
+          undoColor={undoColor}
         ></Letter>
         <Letter
           id="fourthLetter"
@@ -152,6 +180,7 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
           focusColor={letterColors[3]}
           letterInfo={letterInfo}
           undoLetter={undoLetter}
+          undoColor={undoColor}
         ></Letter>
         <Letter
           id="fifthLetter"
@@ -159,14 +188,21 @@ function Word({ focusWord, letterColors, letterInfo, undoLetter }) {
           focusColor={letterColors[4]}
           letterInfo={letterInfo}
           undoLetter={undoLetter}
+          undoColor={undoColor}
         ></Letter>
       </div>
     </>
   );
 }
 
-function Letter({ id, focusLetter, focusColor, letterInfo, undoLetter }) {
-  // don't forget to change style of letter too
+function Letter({
+  id,
+  focusLetter,
+  focusColor,
+  letterInfo,
+  undoLetter,
+  undoColor,
+}) {
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
@@ -189,8 +225,23 @@ function Letter({ id, focusLetter, focusColor, letterInfo, undoLetter }) {
     e.preventDefault();
     const letterplacement = e.target.id;
     undoLetter(letterplacement);
-    console.log("Letter Placement", letterplacement);
   };
+
+  if (undoLetter == id) {
+    const letterColor = (() => {
+      switch (undoColor) {
+        case "green": {
+          return "#6aaa64";
+        }
+        case "yellow": {
+          return "#c9b458";
+        }
+        case "grey": {
+          return "#787c7e";
+        }
+      }
+    })();
+  }
 
   return (
     <>
@@ -213,9 +264,9 @@ function Palette({ onLetterColors, onUndoColor, undoLetter }) {
 
     if (undoLetter) {
       onUndoColor(color);
+    } else {
+      onLetterColors(color);
     }
-
-    onLetterColors(color);
   };
 
   return (
