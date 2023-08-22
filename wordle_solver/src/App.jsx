@@ -163,24 +163,27 @@ function Word({ focusWord, letterColors, undoLetter }) {
 }
 
 function Letter({ id, focusLetter, focusColor, undoLetter }) {
+  let letBorderColor = "#878a8c";
+
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
-        return "#6aaa64";
+        return { backgroundColor: "#6aaa64", borderColor: letBorderColor };
       }
       case "yellow": {
-        return "#c9b458";
+        return { backgroundColor: "#c9b458", borderColor: letBorderColor };
       }
       case "grey": {
-        return "#787c7e";
+        return { backgroundColor: "#787c7e", borderColor: letBorderColor };
       }
     }
   })();
 
   const handleClick = (e) => {
     e.preventDefault();
-    const letterplacement = e.target.id;
-    undoLetter(letterplacement);
+    undoLetter(id);
+    letBorderColor = "blue";
+    console.log("click");
   };
 
   return (
@@ -188,7 +191,7 @@ function Letter({ id, focusLetter, focusColor, undoLetter }) {
       <div
         className={"letter"}
         id={id}
-        style={{ backgroundColor: letterColor }}
+        style={letterColor}
         onClick={handleClick}
       >
         {focusLetter}
