@@ -6,7 +6,6 @@ function Page() {
   const [word, setWord] = useState("");
 
   const [undoLetter, setUndoLetter] = useState("");
-  const [undoColor, setUndoColor] = useState("");
 
   useEffect(() => {
     setWord("grace");
@@ -29,6 +28,7 @@ function Page() {
     if (!undoColor) {
       return;
     }
+
     switch (undoLetter) {
       case "firstLetter":
         setLetterColors((prevColors) => {
@@ -65,10 +65,8 @@ function Page() {
           return undoColors;
         });
         break;
-
-        setUndoColor("");
-        setUndoLetter("");
     }
+    setUndoLetter("");
   }
 
   // esentially this is going to create a new array in letterColors
@@ -82,7 +80,6 @@ function Page() {
           focusWord={word}
           letterColors={letterColors}
           onUndoLetter={handleUndoLetter}
-          undoColor={undoColor}
         ></Board>
         <Palette
           id="palette"
@@ -98,7 +95,7 @@ function Page() {
   );
 }
 
-function Board({ focusWord, letterColors, onUndoLetter, undoColor }) {
+function Board({ focusWord, letterColors, onUndoLetter }) {
   return (
     <>
       <div id="board">
@@ -124,7 +121,7 @@ function Board({ focusWord, letterColors, onUndoLetter, undoColor }) {
   );
 }
 
-function Word({ focusWord, letterColors, undoLetter, undoColor }) {
+function Word({ focusWord, letterColors, undoLetter }) {
   const focusWordArr = focusWord.toUpperCase().split("");
 
   return (
@@ -135,42 +132,37 @@ function Word({ focusWord, letterColors, undoLetter, undoColor }) {
           focusLetter={focusWordArr[0]}
           focusColor={letterColors[0]}
           undoLetter={undoLetter}
-          undoColor={undoColor}
         ></Letter>
         <Letter
           id="secondLetter"
           focusLetter={focusWordArr[1]}
           focusColor={letterColors[1]}
           undoLetter={undoLetter}
-          undoColor={undoColor}
         ></Letter>
         <Letter
           id="thirdLetter"
           focusLetter={focusWordArr[2]}
           focusColor={letterColors[2]}
           undoLetter={undoLetter}
-          undoColor={undoColor}
         ></Letter>
         <Letter
           id="fourthLetter"
           focusLetter={focusWordArr[3]}
           focusColor={letterColors[3]}
           undoLetter={undoLetter}
-          undoColor={undoColor}
         ></Letter>
         <Letter
           id="fifthLetter"
           focusLetter={focusWordArr[4]}
           focusColor={letterColors[4]}
           undoLetter={undoLetter}
-          undoColor={undoColor}
         ></Letter>
       </div>
     </>
   );
 }
 
-function Letter({ id, focusLetter, focusColor, undoLetter, undoColor }) {
+function Letter({ id, focusLetter, focusColor, undoLetter }) {
   const letterColor = (() => {
     switch (focusColor) {
       case "green": {
@@ -190,22 +182,6 @@ function Letter({ id, focusLetter, focusColor, undoLetter, undoColor }) {
     const letterplacement = e.target.id;
     undoLetter(letterplacement);
   };
-
-  if (undoLetter == id) {
-    const letterColor = (() => {
-      switch (undoColor) {
-        case "green": {
-          return "#6aaa64";
-        }
-        case "yellow": {
-          return "#c9b458";
-        }
-        case "grey": {
-          return "#787c7e";
-        }
-      }
-    })();
-  }
 
   return (
     <>
