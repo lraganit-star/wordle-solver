@@ -12,6 +12,9 @@ function Page() {
   });
 
   const getLetterColors = (color) => {
+    if (letterColors == 5) {
+      return;
+    }
     const currentLetterColors = [...letterColors, color];
     setLetterColors(currentLetterColors);
   };
@@ -71,7 +74,11 @@ function Page() {
 
   // esentially this is going to create a new array in letterColors
   // and place the next word in the following row depending on the user input
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (letterColors.length != 5) {
+      return;
+    }
+  };
 
   return (
     <>
