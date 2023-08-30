@@ -3,12 +3,11 @@ import "./App.css";
 
 function Page() {
   const [letterColors, setLetterColors] = useState([]);
-  const [word, setWord] = useState("");
-
+  const [words, setWords] = useState("");
   const [undoLetter, setUndoLetter] = useState("");
 
   useEffect(() => {
-    setWord("grace");
+    setWords("grace");
   });
 
   const getLetterColors = (color) => {
@@ -78,13 +77,17 @@ function Page() {
     if (letterColors.length != 5) {
       return;
     }
+    setLetterColors([]);
+    // setWords([words, "about"]);
   };
+
+  console.log("page words", words);
 
   return (
     <>
       <div id="page">
         <Board
-          focusWord={word}
+          words={words}
           letterColors={letterColors}
           onUndoLetter={handleUndoLetter}
         ></Board>
@@ -102,22 +105,21 @@ function Page() {
   );
 }
 
-function Board({ focusWord, letterColors, onUndoLetter }) {
+function Board({ words, letterColors, onUndoLetter }) {
   return (
     <>
       <div id="board">
         <Word
           id="firstword"
-          focusWord={focusWord}
+          focusWord={words}
           letterColors={letterColors}
           undoLetter={onUndoLetter}
         ></Word>
-
-        {/* add multiple words after getting the different words in from main.js */}
         {/* <Word
           id="secondword"
-          focusWord={focusWord}
+          focusWord={words[1]}
           letterColors={letterColors}
+          undoLetter={onUndoLetter}
         ></Word> */}
         {/* <Word id="thirdword"></Word>
         <Word id="fourthword"></Word>
