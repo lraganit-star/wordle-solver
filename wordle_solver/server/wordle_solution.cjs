@@ -78,24 +78,24 @@ function mostFrequentWord(wordList) {
   return maxi;
 }
 
-function createColorArr(word, colorArr, callback) {
-  const colorArrMaker = colorArr;
-  const letters = word.split("");
-  const question =
-    colorArrMaker.length < 5
-      ? `Can you please tell me the color of the letter "${
-          letters[colorArrMaker.length]
-        }"? `
-      : `Thank you so much for your help! ${colorArrMaker}`;
-  rl.question(question, (answer) => {
-    if (colorArrMaker.length == 5) {
-      callback(colorArrMaker);
-    } else {
-      colorArrMaker.push(answer.toLowerCase());
-      createColorArr(word, colorArr, callback);
-    }
-  });
-}
+// function createColorArr(word, colorArr, callback) {
+//   const colorArrMaker = colorArr;
+//   const letters = word.split("");
+//   const question =
+//     colorArrMaker.length < 5
+//       ? `Can you please tell me the color of the letter "${
+//           letters[colorArrMaker.length]
+//         }"? `
+//       : `Thank you so much for your help! ${colorArrMaker}`;
+//   rl.question(question, (answer) => {
+//     if (colorArrMaker.length == 5) {
+//       callback(colorArrMaker);
+//     } else {
+//       colorArrMaker.push(answer.toLowerCase());
+//       createColorArr(word, colorArr, callback);
+//     }
+//   });
+// }
 
 function reduceWordList(bestWord, wordList, colorArr) {
   var justWordsArr = [];
@@ -116,7 +116,6 @@ function reduceWordList(bestWord, wordList, colorArr) {
       justWords = filteredListGreen;
     }
 
-    // probably have to edit yellow to account for double letters
     if (colorList[i] == "yellow") {
       const filteredListYellow = justWords.filter((word) => {
         return word.split("")[i] != letters[i] && word.includes(letters[i]);

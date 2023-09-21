@@ -6,13 +6,13 @@ const PORT = 8000;
 
 app.use(cors());
 app.use(express.json());
+
 app.post("/api", (req, res) => {
   console.log(req.body.letterColors);
   res.json("Array received!");
 });
 
 app.get("/api", (req, res) => {
-  //   res.json({ users: [1, 2, 3] });
   res.json(wordleModule());
 });
 
