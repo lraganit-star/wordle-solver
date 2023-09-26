@@ -3,6 +3,9 @@ const fsPromise = require("fs").promises;
 const readline = require("readline");
 const _ = require("lodash");
 const neatCsv = require("neat-csv");
+const { getData } = require("./server.js");
+
+console.log(getData);
 
 const rl = readline.createInterface({
   input: process.stdin,

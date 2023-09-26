@@ -78,35 +78,16 @@ function Page() {
       return;
     }
 
-    // const sendDataToServer = async (data) => {
-    //   try {
-    //     const response = await fetch("http://localhost:8000/api", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({ data }),
-    //     });
-
-    //     if (!response.ok) throw new Error(response.statusText);
-
-    //     const serverResponse = await response.json();
-
-    //     console.log(serverResponse); // Logs server response message
-    //   } catch (e) {
-    //     console.error(`Error: ${e}`);
-    //   }
-    // };
-
-    // sendDataToServer(letterColors);
-
     fetch("http://localhost:8000/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ colorArray: letterColors }), // Make sure 'data' key matches in server
-    });
+      body: JSON.stringify({ colorArray: letterColors }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error("Error:", error));
 
     setLetterColors([]);
   };
