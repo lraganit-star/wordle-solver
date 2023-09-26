@@ -8,8 +8,8 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api", (req, res) => {
-  console.log(req.body.letterColors);
-  res.json("Array received!");
+  console.log(req.body.colorArray);
+  res.status(200).send({ message: "Data received" });
 });
 
 app.get("/api", (req, res) => {
@@ -17,5 +17,5 @@ app.get("/api", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server started on port 8000`);
+  console.log(`Server started on port ${PORT}`);
 });

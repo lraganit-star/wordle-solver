@@ -45,11 +45,11 @@ async function myAsyncFunction() {
       if (count < 6) {
         var bestWord = mostFrequentWord(mainWordList).word;
         console.log("Your word is: ", bestWord);
-        createColorArr(bestWord, colorArr, (result) => {
-          mainWordList = reduceWordList(bestWord, mainWordList, result);
+        // createColorArr(bestWord, colorArr, (result) => {
+        //   mainWordList = reduceWordList(bestWord, mainWordList, result);
 
-          processWord(count + 1);
-        });
+        //   processWord(count + 1);
+        // });
       } else if (colorArr.every((color) => color == "green")) {
         rl.close();
         return "Congrats on getting the correct word!";
