@@ -16,11 +16,10 @@ app.post("/api", async (req, res) => {
   dataReceived = req.body.colorArray; // save the colorArray
 
   try {
-    const bestWord = await wordleModule.myAsyncFunction(colorArray);
+    const bestWord = await wordleModule.bestWordGenerator(colorArray);
     res.status(200).send({
       bestWord: bestWord,
       colorArray: colorArray,
-      message: "Data received",
     });
   } catch (error) {
     res

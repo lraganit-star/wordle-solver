@@ -4,18 +4,13 @@ const readline = require("readline");
 const _ = require("lodash");
 const neatCsv = require("neat-csv");
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
 const wordJSON = fs.readFileSync("../client/src/words.json", {
   encoding: "utf8",
   flag: "r",
 });
 const wordleArr = JSON.parse(wordJSON);
-
 const csvFilePath = "unigram_freq.csv";
+let mainWordList;
 
 async function frequencyArr() {
   try {
@@ -36,26 +31,23 @@ async function frequencyArr() {
   }
 }
 
-async function myAsyncFunction(colorArray) {
+async function initalizeWordList() {
+  mainWordList = await frequencyArr();
+}
+initalizeWordList();
+
+async function bestWordGenerator(colorArray) {
   console.log("color array", colorArray);
   try {
-    var mainWordList = await frequencyArr();
-
     return new Promise((resolve, reject) => {
       function processWord(count) {
         if (count < 6) {
-          var bestWord = mostFrequentWord(mainWordList).word;
+          let bestWord = mostFrequentWord(mainWordList).word;
           console.log("Your word is: ", bestWord);
-          resolve(bestWord);
           mainWordList = reduceWordList(bestWord, mainWordList, colorArray);
-        } else if (colorArray.every((color) => color == "green")) {
-          rl.close();
-          resolve("Congrats on getting the correct word!");
-        } else if (count == 6) {
-          rl.close();
-          resolve("You have reached the retry limit :( ");
-        } else {
-          rl.close();
+          resolve(bestWord);
+          console.log(count);
+          count++;
         }
       }
       processWord(0);
@@ -67,37 +59,18 @@ async function myAsyncFunction(colorArray) {
 }
 
 module.exports = {
-  myAsyncFunction,
+  bestWordGenerator,
 };
 
 function mostFrequentWord(wordList) {
-  let maxi = { word: "", count: 0 };
+  let mostUsedWord = { word: "", count: 0 };
   for (let i in wordList) {
-    if (wordList[i].count > maxi.count) {
-      maxi = wordList[i];
+    if (wordList[i].count > mostUsedWord.count) {
+      mostUsedWord = wordList[i];
     }
   }
-  return maxi;
+  return mostUsedWord;
 }
-
-// function createColorArr(word, colorArr, callback) {
-//   const colorArrMaker = colorArr;
-//   const letters = word.split("");
-//   const question =
-//     colorArrMaker.length < 5
-//       ? `Can you please tell me the color of the letter "${
-//           letters[colorArrMaker.length]
-//         }"? `
-//       : `Thank you so much for your help! ${colorArrMaker}`;
-//   rl.question(question, (answer) => {
-//     if (colorArrMaker.length == 5) {
-//       callback(colorArrMaker);
-//     } else {
-//       colorArrMaker.push(answer.toLowerCase());
-//       createColorArr(word, colorArr, callback);
-//     }
-//   });
-// }
 
 function reduceWordList(bestWord, wordList, colorArr) {
   var justWordsArr = [];
