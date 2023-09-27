@@ -17,7 +17,11 @@ app.post("/api", async (req, res) => {
 
   try {
     const bestWord = await wordleModule.myAsyncFunction(colorArray);
-    res.status(200).send({ bestWord: bestWord, message: "Data received" });
+    res.status(200).send({
+      bestWord: bestWord,
+      colorArray: colorArray,
+      message: "Data received",
+    });
   } catch (error) {
     res
       .status(500)
@@ -28,5 +32,3 @@ app.post("/api", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
-
-module.exports = { getData: () => dataReceived };

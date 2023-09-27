@@ -15,7 +15,7 @@ const wordJSON = fs.readFileSync("../client/src/words.json", {
 });
 const wordleArr = JSON.parse(wordJSON);
 
-const csvFilePath = "unigram_freq.csv"; // Specify path of your csv file here.
+const csvFilePath = "unigram_freq.csv";
 
 async function frequencyArr() {
   try {
@@ -36,49 +36,19 @@ async function frequencyArr() {
   }
 }
 
-// async function myAsyncFunction() {
-//   try {
-//     var mainWordList = await frequencyArr();
-
-//     function processWord(count) {
-//       var colorArr = [];
-//       if (count < 6) {
-//         var bestWord = mostFrequentWord(mainWordList).word;
-//         console.log("Your word is: ", bestWord);
-//         // createColorArr(bestWord, colorArr, (result) => {
-//         //   mainWordList = reduceWordList(bestWord, mainWordList, result);
-
-//         //   processWord(count + 1);
-//         // });
-//         return bestWord;
-//       } else if (colorArr.every((color) => color == "green")) {
-//         rl.close();
-//         return "Congrats on getting the correct word!";
-//       } else if (count == 6) {
-//         rl.close();
-//         return "You have reached the retry limit :( ";
-//       } else {
-//         rl.close();
-//       }
-//     }
-//     processWord(0);
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// }
-
-async function myAsyncFunction() {
+async function myAsyncFunction(colorArray) {
+  console.log("color array", colorArray);
   try {
     var mainWordList = await frequencyArr();
 
     return new Promise((resolve, reject) => {
       function processWord(count) {
-        var colorArr = [];
         if (count < 6) {
           var bestWord = mostFrequentWord(mainWordList).word;
           console.log("Your word is: ", bestWord);
           resolve(bestWord);
-        } else if (colorArr.every((color) => color == "green")) {
+          mainWordList = reduceWordList(bestWord, mainWordList, colorArray);
+        } else if (colorArray.every((color) => color == "green")) {
           rl.close();
           resolve("Congrats on getting the correct word!");
         } else if (count == 6) {
