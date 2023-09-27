@@ -3,9 +3,6 @@ const fsPromise = require("fs").promises;
 const readline = require("readline");
 const _ = require("lodash");
 const neatCsv = require("neat-csv");
-const { getData } = require("./server.js");
-
-console.log(getData);
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -39,37 +36,69 @@ async function frequencyArr() {
   }
 }
 
+// async function myAsyncFunction() {
+//   try {
+//     var mainWordList = await frequencyArr();
+
+//     function processWord(count) {
+//       var colorArr = [];
+//       if (count < 6) {
+//         var bestWord = mostFrequentWord(mainWordList).word;
+//         console.log("Your word is: ", bestWord);
+//         // createColorArr(bestWord, colorArr, (result) => {
+//         //   mainWordList = reduceWordList(bestWord, mainWordList, result);
+
+//         //   processWord(count + 1);
+//         // });
+//         return bestWord;
+//       } else if (colorArr.every((color) => color == "green")) {
+//         rl.close();
+//         return "Congrats on getting the correct word!";
+//       } else if (count == 6) {
+//         rl.close();
+//         return "You have reached the retry limit :( ";
+//       } else {
+//         rl.close();
+//       }
+//     }
+//     processWord(0);
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
+
 async function myAsyncFunction() {
   try {
     var mainWordList = await frequencyArr();
 
-    function processWord(count) {
-      var colorArr = [];
-      if (count < 6) {
-        var bestWord = mostFrequentWord(mainWordList).word;
-        console.log("Your word is: ", bestWord);
-        // createColorArr(bestWord, colorArr, (result) => {
-        //   mainWordList = reduceWordList(bestWord, mainWordList, result);
-
-        //   processWord(count + 1);
-        // });
-      } else if (colorArr.every((color) => color == "green")) {
-        rl.close();
-        return "Congrats on getting the correct word!";
-      } else if (count == 6) {
-        rl.close();
-        return "You have reached the retry limit :( ";
-      } else {
-        rl.close();
+    return new Promise((resolve, reject) => {
+      function processWord(count) {
+        var colorArr = [];
+        if (count < 6) {
+          var bestWord = mostFrequentWord(mainWordList).word;
+          console.log("Your word is: ", bestWord);
+          resolve(bestWord);
+        } else if (colorArr.every((color) => color == "green")) {
+          rl.close();
+          resolve("Congrats on getting the correct word!");
+        } else if (count == 6) {
+          rl.close();
+          resolve("You have reached the retry limit :( ");
+        } else {
+          rl.close();
+        }
       }
-    }
-    processWord(0);
+      processWord(0);
+    });
   } catch (error) {
     console.error("Error:", error);
+    reject(error);
   }
 }
 
-module.exports = myAsyncFunction;
+module.exports = {
+  myAsyncFunction,
+};
 
 function mostFrequentWord(wordList) {
   let maxi = { word: "", count: 0 };

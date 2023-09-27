@@ -9,14 +9,20 @@ app.use(express.json());
 
 let dataReceived;
 
-app.post("/api", (req, res) => {
-  dataReceived = req.body.colorArray;
-  console.log(dataReceived);
-  res.status(200).send({ message: "Data received" });
-});
+app.post("/api", async (req, res) => {
+  const colorArray = req.body.colorArray;
 
-app.get("/api", (req, res) => {
-  res.json(wordleModule());
+  console.log(colorArray); // log the received colorArray
+  dataReceived = req.body.colorArray; // save the colorArray
+
+  try {
+    const bestWord = await wordleModule.myAsyncFunction(colorArray);
+    res.status(200).send({ bestWord: bestWord, message: "Data received" });
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "There was an error handling your request." });
+  }
 });
 
 app.listen(PORT, () => {
