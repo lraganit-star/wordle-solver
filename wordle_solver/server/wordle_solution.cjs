@@ -49,10 +49,6 @@ async function bestWordGenerator(colorArray) {
           bestWord = mostFrequentWord(mainWordList).word;
           resolve(bestWord);
           count++;
-          // } else {
-          //   let bestWord = initialWord;
-          //   resolve(bestWord);
-          //   count++;
         }
       }
       processWord(0);

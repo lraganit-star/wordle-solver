@@ -12,7 +12,6 @@ let colorArr;
 app.post("/api", async (req, res) => {
   const colorArray = req.body.colorArray;
 
-  console.log(colorArray); // log the received colorArray
   colorArr = req.body.colorArray; // save the colorArray
 
   try {
