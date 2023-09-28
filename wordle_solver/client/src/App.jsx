@@ -8,9 +8,27 @@ function Page() {
   const [startButton, setStartButton] = useState("Start");
   const [buttonCount, setButtonCount] = useState(0);
 
+  // useEffect(() => {
+  //   setWords("about");
+  // });
+
   useEffect(() => {
-    setWords("grace");
+    fetch("http://localhost:8000/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setWords(data.bestWord);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   });
+
+  console.log("words", words);
 
   const getLetterColors = (color) => {
     if (letterColors == 5) {
@@ -73,12 +91,22 @@ function Page() {
     setUndoLetter("");
   }
 
-  // esentially this is going to create a new array in letterColors
-  // and place the next word in the following row depending on the user input
   const handleSubmit = () => {
     if (buttonCount == 0) {
       setLetterColors([]);
       setStartButton("Submit");
+
+      fetch("http://localhost:8000/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ colorArray: [] }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error("Error:", error));
+
       setButtonCount(buttonCount + 1);
     }
     if (letterColors.length != 5) {
@@ -97,8 +125,6 @@ function Page() {
 
     setLetterColors([]);
   };
-
-  console.log("page words", words);
 
   return (
     <>
