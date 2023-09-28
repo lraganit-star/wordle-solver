@@ -11,6 +11,8 @@ const wordJSON = fs.readFileSync("../client/src/words.json", {
 const wordleArr = JSON.parse(wordJSON);
 const csvFilePath = "unigram_freq.csv";
 let mainWordList;
+const initialWord = mostFrequentWord(mainWordList).word;
+let bestWord = initialWord;
 
 async function frequencyArr() {
   try {
@@ -38,16 +40,19 @@ initalizeWordList();
 
 async function bestWordGenerator(colorArray) {
   console.log("color array", colorArray);
+
   try {
     return new Promise((resolve, reject) => {
       function processWord(count) {
         if (count < 6) {
-          let bestWord = mostFrequentWord(mainWordList).word;
-          console.log("Your word is: ", bestWord);
           mainWordList = reduceWordList(bestWord, mainWordList, colorArray);
+          bestWord = mostFrequentWord(mainWordList).word;
           resolve(bestWord);
-          console.log(count);
           count++;
+          // } else {
+          //   let bestWord = initialWord;
+          //   resolve(bestWord);
+          //   count++;
         }
       }
       processWord(0);

@@ -7,13 +7,13 @@ const PORT = 8000;
 app.use(cors());
 app.use(express.json());
 
-let dataReceived;
+let colorArr;
 
 app.post("/api", async (req, res) => {
   const colorArray = req.body.colorArray;
 
   console.log(colorArray); // log the received colorArray
-  dataReceived = req.body.colorArray; // save the colorArray
+  colorArr = req.body.colorArray; // save the colorArray
 
   try {
     const bestWord = await wordleModule.bestWordGenerator(colorArray);
