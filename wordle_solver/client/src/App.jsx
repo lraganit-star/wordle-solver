@@ -8,10 +8,6 @@ function Page() {
   const [startButton, setStartButton] = useState("Start");
   const [buttonCount, setButtonCount] = useState(0);
 
-  // useEffect(() => {
-  //   setWords("about");
-  // });
-
   useEffect(() => {
     fetch("http://localhost:8000/api", {
       method: "POST",
@@ -27,8 +23,6 @@ function Page() {
         console.error("Error:", error);
       });
   });
-
-  console.log("words", words);
 
   const getLetterColors = (color) => {
     if (letterColors == 5) {
@@ -90,6 +84,21 @@ function Page() {
     }
     setUndoLetter("");
   }
+
+  const handleDeleteKey = (e) => {
+    if (e.ctrlKey && e.key === "z") {
+      const deleteLast = [...letterColors];
+      deleteLast.pop();
+      setLetterColors(deleteLast);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleDeleteKey);
+    return () => {
+      window.removeEventListener("keydown", handleDeleteKey);
+    };
+  }, [letterColors, setLetterColors]);
 
   const handleSubmit = () => {
     if (buttonCount == 0) {
