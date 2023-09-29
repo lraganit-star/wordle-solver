@@ -5,7 +5,6 @@ function Page() {
   const [letterColors, setLetterColors] = useState([]);
   const [words, setWords] = useState("");
   const [undoLetter, setUndoLetter] = useState("");
-  const [startButton, setStartButton] = useState("Start");
   const [buttonCount, setButtonCount] = useState(0);
 
   useEffect(() => {
@@ -86,7 +85,7 @@ function Page() {
   }
 
   const handleDeleteKey = (e) => {
-    if (e.ctrlKey && e.key === "z") {
+    if ((e.ctrlKey && e.key === "z") || e.key === "Backspace") {
       const deleteLast = [...letterColors];
       deleteLast.pop();
       setLetterColors(deleteLast);
@@ -103,7 +102,6 @@ function Page() {
   const handleSubmit = () => {
     if (buttonCount == 0) {
       setLetterColors([]);
-      setStartButton("Submit");
 
       fetch("http://localhost:8000/api", {
         method: "POST",
@@ -150,7 +148,7 @@ function Page() {
           undoLetter={undoLetter}
         ></Palette>
         <button id="submit" onClick={handleSubmit}>
-          {startButton}
+          Submit
         </button>
       </div>
     </>
