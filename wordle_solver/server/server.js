@@ -30,3 +30,7 @@ app.post("/api", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+
+app.get("/", function (req, res) {
+  res.send("Hello World!");
+});
