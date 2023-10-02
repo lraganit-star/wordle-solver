@@ -1,11 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const app = express();
 const wordleModule = require("./wordle_solution.cjs");
 const PORT = 8000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../build")));
 
 let colorArr;
 
@@ -31,6 +33,6 @@ app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
 
-app.get("/", function (req, res) {
-  res.send("Hello World!");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
