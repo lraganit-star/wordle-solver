@@ -3,7 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 const wordleModule = require("./wordle_solution.cjs");
-const PORT = 8000;
+const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
@@ -29,8 +29,8 @@ app.post("/api", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
 
 app.get("*", (req, res) => {
