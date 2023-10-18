@@ -8,7 +8,7 @@ function Page() {
   const [buttonCount, setButtonCount] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api", {
+    fetch("/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ function Page() {
     if (buttonCount == 0) {
       setLetterColors([]);
 
-      fetch("http://localhost:8000/api", {
+      fetch("/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ function Page() {
     if (letterColors.length != 5) {
       return;
     }
-    fetch("http://localhost:8000/api", {
+    fetch("/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
